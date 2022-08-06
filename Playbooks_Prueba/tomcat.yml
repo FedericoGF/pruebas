@@ -1,0 +1,36 @@
+---
+- name: Requisitos para instalacion de servidores
+  hosts: linux
+  become: yes
+
+  tasks: 
+
+  - name: Instalar Java en Redhat
+    yum:
+      name: java
+      state: latest
+    when: ansible_os_family == "Rocky"
+
+  - name: Instalar Java en Debian
+    apt:
+      name: java
+      state: latest 
+    when: ansible_os_family == "Debian" 
+
+      
+  - name: Descargando paquetes del servidor Tomcat
+    get_url:
+      urd: https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.41/bin/apache-tomcat-9.0.41-deployer.tar.gz
+      dest: /opt
+
+  - name: extraer paquetes de Tomcat
+    unarchive:
+      src: /op/apache-tomcat-9.0.41-deployer.tar.gz
+      dest: /opt
+      remote_src: yes 
+  
+  - name: Iniciamos los servivios Tomcat
+    shell: nohup apache-tomcat-9.0.41
+
+
+  
